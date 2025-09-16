@@ -2,13 +2,13 @@ databases:
   - name: triplezerosports-postgres
     databaseName: triplezerosports
     user: triplezerosports
-    plan: starter
+    plan: free
 
 services:
   - type: web
     name: triplezerosports-cms
     env: node
-    plan: starter
+    plan: free
     buildCommand: |
       npm install -g pnpm &&
       pnpm install --frozen-lockfile &&
@@ -16,7 +16,7 @@ services:
       pnpm --filter @triplezerosports/types build &&
       pnpm --filter cms build
     startCommand: pnpm --filter cms start
-    healthCheckPath: /admin
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -36,13 +36,14 @@ services:
         generateValue: true
       - key: NODE_ENV
         value: production
+      # Render sets PORT automatically; optional to include:
       - key: PORT
         value: 3001
 
   - type: web
     name: triplezerosports-web
     env: node
-    plan: starter
+    plan: free
     buildCommand: |
       npm install -g pnpm &&
       pnpm install --frozen-lockfile &&
@@ -50,6 +51,7 @@ services:
       pnpm --filter @triplezerosports/types build &&
       pnpm --filter web build
     startCommand: pnpm --filter web start
+    healthCheckPath: /
     envVars:
       - key: PAYLOAD_URL
         value: https://triplezerosports-cms.onrender.com
