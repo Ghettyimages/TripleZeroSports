@@ -11,7 +11,7 @@ services:
     plan: free
     buildCommand: |
       cd apps/cms
-      npm ci
+      npm install
       npm run build
     startCommand: |
       cd apps/cms
@@ -46,7 +46,7 @@ services:
     plan: free
     buildCommand: |
       cd apps/web
-      npm ci
+      npm install
       npm run build
     startCommand: |
       cd apps/web
