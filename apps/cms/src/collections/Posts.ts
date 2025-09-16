@@ -61,7 +61,7 @@ export const Posts: CollectionConfig = {
             const response = await fetch(`${process.env.WEB_URL}/api/revalidate`, {
               method: 'POST',
               headers: {
-                'Authorization': `Bearer ${process.env.WEBHOOK_SECRET}`,
+                'x-webhook-secret': process.env.WEBHOOK_SECRET || '',
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({ paths }),
