@@ -10,6 +10,8 @@ services:
     env: node
     plan: free
     buildCommand: |
+      npm install --prefix packages/types
+      npm install --prefix packages/config
       cd apps/cms
       npm install
       npm run build
@@ -45,6 +47,8 @@ services:
     env: node
     plan: free
     buildCommand: |
+      npm install --prefix packages/types
+      npm install --prefix packages/config
       cd apps/web
       npm install
       npm run build
