@@ -13,7 +13,7 @@
     "clean": "rm -rf .next dist"
   },
   "dependencies": {
-    "@triplezerosports/types": "workspace:*",
+    "@triplezerosports/types": "file:../../packages/types",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
@@ -24,7 +24,7 @@
     "reading-time": "^1.5.0"
   },
   "devDependencies": {
-    "@triplezerosports/config": "workspace:*",
+    "@triplezerosports/config": "file:../../packages/config",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

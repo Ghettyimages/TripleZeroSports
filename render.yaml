@@ -10,19 +10,23 @@ services:
     env: node
     plan: free
     buildCommand: |
-      npm install -g pnpm &&
-      pnpm install &&
-      pnpm --filter @triplezerosports/config build &&
-      pnpm --filter @triplezerosports/types build &&
-      pnpm --filter cms build
-    startCommand: pnpm --filter cms start
+      cd apps/cms
+      npm ci
+      npm run build
+    startCommand: |
+      cd apps/cms
+      npm run start
     healthCheckPath: /api/health
     envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
       - key: DATABASE_URL
         fromDatabase:
           name: triplezerosports-postgres
           property: connectionString
       - key: PAYLOAD_SECRET
+        generateValue: true
+      - key: WEBHOOK_SECRET
         generateValue: true
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
@@ -30,29 +34,28 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
-      - key: WEB_URL
-        value: https://triplezerosports.onrender.com
-      - key: WEBHOOK_SECRET
-        generateValue: true
       - key: NODE_ENV
         value: production
-      # Render sets PORT automatically; optional to include:
-      - key: PORT
-        value: 3001
+      # TODO: Replace with actual URL after first deploy
+      - key: WEB_URL
+        value: https://triplezerosports-web.onrender.com
 
   - type: web
     name: triplezerosports-web
     env: node
     plan: free
     buildCommand: |
-      npm install -g pnpm &&
-      pnpm install &&
-      pnpm --filter @triplezerosports/config build &&
-      pnpm --filter @triplezerosports/types build &&
-      pnpm --filter web build
-    startCommand: pnpm --filter web start
+      cd apps/web
+      npm ci
+      npm run build
+    startCommand: |
+      cd apps/web
+      npm run start
     healthCheckPath: /
     envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      # TODO: Replace with actual URL after first deploy
       - key: PAYLOAD_URL
         value: https://triplezerosports-cms.onrender.com
       - key: WEBHOOK_SECRET
@@ -60,7 +63,8 @@ services:
           type: web
           name: triplezerosports-cms
           envVarKey: WEBHOOK_SECRET
+      # TODO: Replace with actual URL after first deploy
       - key: NEXT_PUBLIC_SITE_URL
-        value: https://triplezerosports.onrender.com
+        value: https://triplezerosports-web.onrender.com
       - key: NODE_ENV
         value: production
