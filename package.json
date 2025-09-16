@@ -1,0 +1,37 @@
+{
+  "name": "triplezerosports",
+  "version": "1.0.0",
+  "description": "TripleZeroSports.com - Sports news platform with Payload CMS and Next.js",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter cms dev\" \"pnpm --filter web dev\"",
+    "dev:cms": "pnpm --filter cms dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm --filter cms build && pnpm --filter web build",
+    "build:cms": "pnpm --filter cms build",
+    "build:web": "pnpm --filter web build",
+    "start": "concurrently \"pnpm --filter cms start\" \"pnpm --filter web start\"",
+    "start:cms": "pnpm --filter cms start",
+    "start:web": "pnpm --filter web start",
+    "lint": "pnpm --filter '*' lint",
+    "lint:fix": "pnpm --filter '*' lint:fix",
+    "test": "pnpm --filter '*' test",
+    "clean": "pnpm --filter '*' clean",
+    "seed": "pnpm --filter cms seed"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "packageManager": "pnpm@8.6.12"
+}

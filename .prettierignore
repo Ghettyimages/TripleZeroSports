@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.next/
+build/
+*.min.js
+*.bundle.js

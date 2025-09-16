@@ -11,7 +11,10 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm &&
-      pnpm install --frozen-lockfile &&
+      ls -la &&
+      pwd &&
+      find . -name "package.json" -type f &&
+      pnpm install &&
       pnpm --filter @triplezerosports/config build &&
       pnpm --filter @triplezerosports/types build &&
       pnpm --filter cms build
@@ -46,7 +49,10 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm &&
-      pnpm install --frozen-lockfile &&
+      ls -la &&
+      pwd &&
+      find . -name "package.json" -type f &&
+      pnpm install &&
       pnpm --filter @triplezerosports/config build &&
       pnpm --filter @triplezerosports/types build &&
       pnpm --filter web build

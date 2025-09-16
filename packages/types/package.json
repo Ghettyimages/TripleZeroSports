@@ -1,0 +1,20 @@
+{
+  "name": "@triplezerosports/types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for TripleZeroSports",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  }
+}

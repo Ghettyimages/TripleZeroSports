@@ -1,0 +1,24 @@
+{
+  "name": "@triplezerosports/config",
+  "version": "1.0.0",
+  "description": "Shared configuration for TripleZeroSports",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./eslint": {
+      "types": "./eslint.d.ts",
+      "default": "./eslint.js"
+    }
+  }
+}
