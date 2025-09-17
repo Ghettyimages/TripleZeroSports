@@ -34,10 +34,29 @@ const start = async () => {
     await payload.init({
       secret: process.env.PAYLOAD_SECRET!,
       express: app,
-      onInit: () => {
+      onInit: async () => {
         payload.logger.info("Payload CMS initialized successfully");
         payload.logger.info(`Admin URL: ${process.env.CMS_PUBLIC_URL || 'http://localhost:3001'}/admin`);
+        
+        // Test database connection by trying to count users
+        try {
+          const userCount = await payload.count({
+            collection: 'users',
+          });
+          payload.logger.info(`Database connection test: Found ${userCount.totalDocs} users`);
+        } catch (dbError) {
+          payload.logger.error("Database connection test failed:", dbError);
+        }
       },
+    });
+
+    // Add error handling middleware after Payload is initialized
+    app.use((err: any, req: any, res: any, next: any) => {
+      if (req.path.startsWith('/api/')) {
+        console.error(`API Error on ${req.path}:`, err);
+        payload.logger.error(`API Error on ${req.path}:`, err);
+      }
+      next(err);
     });
 
     const port = process.env.PORT || 3001;
