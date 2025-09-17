@@ -31,7 +31,8 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL!,
-    }
+    },
+    migrationDir: path.resolve(__dirname, "../migrations"),
   }),
   typescript: {
     outputFile: path.resolve(__dirname, "../payload-types.ts")

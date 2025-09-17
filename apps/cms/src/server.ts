@@ -45,7 +45,22 @@ const start = async () => {
           });
           payload.logger.info(`Database connection test: Found ${userCount.totalDocs} users`);
         } catch (dbError) {
-          payload.logger.error("Database connection test failed:", dbError);
+          payload.logger.error("Database connection test failed - this is expected if tables don't exist yet:", dbError);
+          
+          // Try to run migrations programmatically
+          try {
+            payload.logger.info("Attempting to run migrations...");
+            await payload.db.migrate();
+            payload.logger.info("Migrations completed successfully");
+            
+            // Test again after migration
+            const userCountAfterMigration = await payload.count({
+              collection: 'users',
+            });
+            payload.logger.info(`After migration: Found ${userCountAfterMigration.totalDocs} users`);
+          } catch (migrationError) {
+            payload.logger.error("Migration failed:", migrationError);
+          }
         }
       },
     });
