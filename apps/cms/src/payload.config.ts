@@ -8,13 +8,14 @@ import { Tags } from "./collections/Tags";
 import { Authors } from "./collections/Authors";
 
 export default buildConfig({
-  serverURL: process.env.CMS_PUBLIC_URL,
+  serverURL: process.env.CMS_PUBLIC_URL || "https://triplezerosports-cms.onrender.com",
   admin: {
     user: "users",
     meta: {
       titleSuffix: " • Triple Zero Sports CMS"
     },
     bundler: webpackBundler(),
+    disable: false,
   },
   editor: slateEditor({}),
   collections: [
