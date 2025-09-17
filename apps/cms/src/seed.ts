@@ -322,3 +322,4 @@ const seed = async () => {
 };
 
 seed();
+

@@ -37,3 +37,4 @@ export const Users: CollectionConfig = {
     },
   ],
 };
+

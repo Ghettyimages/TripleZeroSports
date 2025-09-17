@@ -37,3 +37,4 @@ export function TagRow({ tagName, tagSlug, posts }: TagRowProps) {
     </section>
   );
 }
+

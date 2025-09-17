@@ -23,3 +23,4 @@ export function PostGrid({ posts, className = '' }: PostGridProps) {
     </div>
   );
 }
+

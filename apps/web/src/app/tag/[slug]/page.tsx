@@ -129,3 +129,4 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
 }
 
 export const revalidate = 300; // 5 minutes
+

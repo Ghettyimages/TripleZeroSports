@@ -115,3 +115,4 @@ export function Prose({ content, className = '' }: ProseProps) {
     </div>
   );
 }
+

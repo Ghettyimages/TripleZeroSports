@@ -13,3 +13,4 @@ Sitemap: ${siteConfig.baseUrl}/sitemap.xml`;
     },
   });
 }
+

@@ -76,3 +76,4 @@ export function AuthorCard({ author }: AuthorCardProps) {
     </div>
   );
 }
+

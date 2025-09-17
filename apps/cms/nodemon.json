@@ -4,3 +4,4 @@
   "ignore": ["src/payload-types.ts"],
   "exec": "ts-node --esm src/server.ts"
 }
+

@@ -7,3 +7,4 @@ export const generateSlug = (text: string): string => {
     remove: /[*+~.()'"!:@]/g,
   });
 };
+

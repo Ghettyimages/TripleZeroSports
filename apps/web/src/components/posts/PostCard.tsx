@@ -83,3 +83,4 @@ export function PostCard({ post, featured = false, className = '' }: PostCardPro
     </article>
   );
 }
+

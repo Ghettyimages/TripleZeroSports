@@ -77,3 +77,4 @@ export async function GET() {
 }
 
 export const revalidate = 3600; // 1 hour
+

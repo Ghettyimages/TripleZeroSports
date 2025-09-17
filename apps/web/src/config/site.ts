@@ -34,3 +34,4 @@ export const siteConfig: SiteConfig = {
     plausibleDomain: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
   },
 };
+

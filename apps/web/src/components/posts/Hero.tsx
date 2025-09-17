@@ -36,3 +36,4 @@ export function Hero({ featuredPosts }: HeroProps) {
     </section>
   );
 }
+

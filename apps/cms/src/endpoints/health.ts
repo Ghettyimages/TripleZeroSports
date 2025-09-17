@@ -21,3 +21,4 @@ const health: PayloadHandler = async (req, res) => {
 };
 
 export default health;
+

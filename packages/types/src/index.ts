@@ -105,3 +105,4 @@ export interface SearchIndex {
   author: string;
   publishedAt: string;
 }
+
