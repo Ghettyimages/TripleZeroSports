@@ -1,83 +1,38 @@
-import path from 'path';
-import { buildConfig } from 'payload/config';
-import { webpackBundler } from '@payloadcms/bundler-webpack';
-import { postgresAdapter } from '@payloadcms/db-postgres';
-import { slateEditor } from '@payloadcms/richtext-slate';
-import { cloudStorage, cloudinaryAdapter } from '@payloadcms/plugin-cloud-storage';
+import { buildConfig } from "payload/config";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Posts } from "./collections/Posts";
+import { Tags } from "./collections/Tags";
+import { Authors } from "./collections/Authors";
 
-// Collections
-import { Posts } from './collections/Posts';
-import { Tags } from './collections/Tags';
-import { Authors } from './collections/Authors';
-import { Media } from './collections/Media';
-import { Users } from './collections/Users';
-
-// Endpoints
-import health from './endpoints/health';
-
-const cloudinaryEnabled = Boolean(
-  process.env.CLOUDINARY_CLOUD_NAME &&
-  process.env.CLOUDINARY_API_KEY &&
-  process.env.CLOUDINARY_API_SECRET
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default buildConfig({
+  serverURL: process.env.CMS_PUBLIC_URL, // optional, for absolute links
   admin: {
-    user: Users.slug,
-    bundler: webpackBundler(),
+    user: "users",
     meta: {
-      titleSuffix: '- TripleZeroSports CMS',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.jpg',
-    },
+      titleSuffix: " • Triple Zero Sports CMS"
+    }
   },
-  editor: slateEditor({}),
-  collections: [Posts, Tags, Authors, Media, Users],
-  endpoints: [
+  collections: [
     {
-      path: '/health',
-      method: 'get',
-      handler: health,
+      slug: "users",
+      auth: true,
+      admin: { useAsTitle: "email" },
+      fields: []
     },
+    Authors,
+    Tags,
+    Posts
   ],
+  db: {
+    adapter: "postgres",
+    url: process.env.DATABASE_URL!,
+    pool: { min: 0, max: 10 }
+  },
   typescript: {
-    outputFile: path.resolve(__dirname, 'payload-types.ts'),
-  },
-  graphQL: {
-    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
-  },
-  plugins: [
-    ...(cloudinaryEnabled
-      ? [
-          cloudStorage({
-            collections: {
-              media: {
-                adapter: cloudinaryAdapter({
-                  cloudName: process.env.CLOUDINARY_CLOUD_NAME as string,
-                  apiKey: process.env.CLOUDINARY_API_KEY as string,
-                  apiSecret: process.env.CLOUDINARY_API_SECRET as string,
-                  folder: 'triplezerosports',
-                }),
-              },
-            },
-          }),
-        ]
-      : []),
-  ],
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL,
-    },
-  }),
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  cors: [
-    process.env.WEB_URL || 'http://localhost:3000',
-    'http://localhost:3000',
-    'http://localhost:3001',
-  ],
-  csrf: [
-    process.env.WEB_URL || 'http://localhost:3000',
-    'http://localhost:3000',
-    'http://localhost:3001',
-  ],
+    outputFile: path.resolve(__dirname, "../payload-types.ts")
+  }
 });

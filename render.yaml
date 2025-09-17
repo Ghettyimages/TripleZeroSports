@@ -10,10 +10,8 @@ services:
     env: node
     plan: free
     buildCommand: |
-      npm ci --include=dev --prefix packages/types
-      npm ci --include=dev --prefix packages/config
       cd apps/cms
-      npm ci --include=dev
+      npm install --no-audit --no-fund --workspaces=false
       npm run build
     startCommand: |
       cd apps/cms
@@ -30,27 +28,20 @@ services:
         generateValue: true
       - key: WEBHOOK_SECRET
         generateValue: true
-      - key: CLOUDINARY_CLOUD_NAME
-        sync: false
-      - key: CLOUDINARY_API_KEY
-        sync: false
-      - key: CLOUDINARY_API_SECRET
-        sync: false
+      - key: WEB_URL
+        value: https://triplezerosports-web.onrender.com  # update after first deploy
+      - key: CMS_PUBLIC_URL
+        value: https://triplezerosports-cms.onrender.com   # optional, for absolute links
       - key: NODE_ENV
         value: production
-      # TODO: Replace with actual URL after first deploy
-      - key: WEB_URL
-        value: https://triplezerosports-web.onrender.com
 
   - type: web
     name: triplezerosports-web
     env: node
     plan: free
     buildCommand: |
-      npm ci --include=dev --prefix packages/types
-      npm ci --include=dev --prefix packages/config
       cd apps/web
-      npm ci --include=dev
+      npm install --no-audit --no-fund --workspaces=false
       npm run build
     startCommand: |
       cd apps/web
@@ -59,16 +50,14 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 20.11.1
-      # TODO: Replace with actual URL after first deploy
       - key: PAYLOAD_URL
-        value: https://triplezerosports-cms.onrender.com
+        value: https://triplezerosports-cms.onrender.com  # update after first deploy
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://triplezerosports-web.onrender.com   # update after first deploy
       - key: WEBHOOK_SECRET
         fromService:
           type: web
           name: triplezerosports-cms
           envVarKey: WEBHOOK_SECRET
-      # TODO: Replace with actual URL after first deploy
-      - key: NEXT_PUBLIC_SITE_URL
-        value: https://triplezerosports-web.onrender.com
       - key: NODE_ENV
         value: production
