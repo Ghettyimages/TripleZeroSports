@@ -2,6 +2,7 @@ import { buildConfig } from "payload/config";
 import path from "path";
 import { fileURLToPath } from "url";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
+import { postgresAdapter } from "@payloadcms/db-postgres";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { Posts } from "./collections/Posts";
 import { Tags } from "./collections/Tags";
@@ -31,10 +32,11 @@ export default buildConfig({
     Tags,
     Posts
   ],
-  db: {
-    adapter: "postgres",
-    url: process.env.DATABASE_URL!,
-  },
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL!,
+    }
+  }),
   typescript: {
     outputFile: path.resolve(__dirname, "../payload-types.ts")
   }

@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Simple health endpoint for Render
-app.get("/api/health", (_req, res) => res.status(200).json({ ok: true }));
+app.get("/api/health", (_req: any, res: any) => res.status(200).json({ ok: true }));
 
 const start = async () => {
   await payload.init({
