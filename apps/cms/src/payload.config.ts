@@ -15,7 +15,6 @@ export default buildConfig({
       titleSuffix: " • Triple Zero Sports CMS"
     },
     bundler: webpackBundler(),
-    disable: false,
   },
   editor: slateEditor({}),
   collections: [
