@@ -3,8 +3,7 @@ import { buildConfig } from 'payload/config';
 import { webpackBundler } from '@payloadcms/bundler-webpack';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { slateEditor } from '@payloadcms/richtext-slate';
-import { cloudStorage } from '@payloadcms/plugin-cloud-storage';
-import { cloudinaryAdapter } from '@payloadcms/plugin-cloud-storage/cloudinary';
+import { cloudStorage, cloudinaryAdapter } from '@payloadcms/plugin-cloud-storage';
 
 // Collections
 import { Posts } from './collections/Posts';
