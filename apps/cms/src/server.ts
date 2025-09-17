@@ -17,9 +17,9 @@ app.get("/", (_req: any, res: any) => res.redirect("/admin"));
 
 const start = async () => {
   try {
-    payload.logger.info("Starting Payload CMS...");
-    payload.logger.info(`DATABASE_URL exists: ${!!process.env.DATABASE_URL}`);
-    payload.logger.info(`PAYLOAD_SECRET exists: ${!!process.env.PAYLOAD_SECRET}`);
+    console.log("Starting Payload CMS...");
+    console.log(`DATABASE_URL exists: ${!!process.env.DATABASE_URL}`);
+    console.log(`PAYLOAD_SECRET exists: ${!!process.env.PAYLOAD_SECRET}`);
     
     await payload.init({
       secret: process.env.PAYLOAD_SECRET!,
@@ -35,7 +35,7 @@ const start = async () => {
       payload.logger.info(`CMS listening on :${port}`);
     });
   } catch (error) {
-    payload.logger.error("Failed to start Payload CMS:", error);
+    console.error("Failed to start Payload CMS:", error);
     process.exit(1);
   }
 };
