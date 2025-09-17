@@ -12,6 +12,16 @@ app.use(express.json());
 // Simple health endpoint for Render
 app.get("/api/health", (_req: any, res: any) => res.status(200).json({ ok: true }));
 
+// Debug endpoint to check environment variables
+app.get("/api/debug", (_req: any, res: any) => {
+  res.json({
+    hasDatabase: !!process.env.DATABASE_URL,
+    hasSecret: !!process.env.PAYLOAD_SECRET,
+    nodeEnv: process.env.NODE_ENV,
+    databaseUrlLength: process.env.DATABASE_URL?.length || 0
+  });
+});
+
 // Redirect root to admin
 app.get("/", (_req: any, res: any) => res.redirect("/admin"));
 
