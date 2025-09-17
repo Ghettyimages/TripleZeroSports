@@ -10,7 +10,7 @@ export async function GET() {
       sort: '-publishedAt',
     });
 
-    const rssItems = posts.docs.map((post) => {
+    const rssItems = posts.docs.map((post: any) => {
       const author = typeof post.author === 'object' ? post.author : null;
       const plainTextBody = extractTextFromRichText(post.body);
       
