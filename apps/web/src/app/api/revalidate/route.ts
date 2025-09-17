@@ -1,52 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 
+type RevalidateBody =
+  | { paths: string[] }
+  | { postSlug?: string; tagSlug?: string };
+
 export async function POST(request: NextRequest) {
   try {
-    // Verify the webhook secret
-    const authHeader = request.headers.get('authorization');
-    const expectedSecret = `Bearer ${process.env.WEBHOOK_SECRET}`;
-    
-    if (!authHeader || authHeader !== expectedSecret) {
-      return NextResponse.json(
-        { message: 'Unauthorized' },
-        { status: 401 }
-      );
+    const secretHeader = request.headers.get('x-webhook-secret');
+    const expectedSecret = process.env.WEBHOOK_SECRET;
+
+    if (!expectedSecret || !secretHeader || secretHeader !== expectedSecret) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { paths } = body;
+    const body = (await request.json()) as RevalidateBody;
 
-    if (!paths || !Array.isArray(paths)) {
-      return NextResponse.json(
-        { message: 'Invalid request body. Expected paths array.' },
-        { status: 400 }
-      );
-    }
+    const toRevalidate = new Set<string>(['/', '/rss.xml', '/sitemap.xml']);
 
-    // Revalidate each path
-    const revalidatedPaths: string[] = [];
-    for (const path of paths) {
-      try {
-        revalidatePath(path);
-        revalidatedPaths.push(path);
-      } catch (error) {
-        console.error(`Failed to revalidate path ${path}:`, error);
+    if ('paths' in body && Array.isArray(body.paths)) {
+      for (const p of body.paths) {
+        if (typeof p === 'string' && p.startsWith('/')) toRevalidate.add(p);
       }
     }
 
-    return NextResponse.json({
-      message: 'Revalidation triggered successfully',
-      revalidatedPaths,
-      timestamp: new Date().toISOString(),
-    });
+    if ('postSlug' in body && body.postSlug) {
+      toRevalidate.add(`/post/${body.postSlug}`);
+    }
 
+    if ('tagSlug' in body && body.tagSlug) {
+      toRevalidate.add(`/tag/${body.tagSlug}`);
+    }
+
+    const revalidatedPaths: string[] = [];
+    for (const p of toRevalidate) {
+      try {
+        revalidatePath(p);
+        revalidatedPaths.push(p);
+      } catch (err) {
+        console.error(`Failed to revalidate path ${p}:`, err);
+      }
+    }
+
+    return NextResponse.json({ revalidated: true, paths: revalidatedPaths });
   } catch (error) {
     console.error('Revalidation error:', error);
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
 

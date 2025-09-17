@@ -3,7 +3,8 @@ import { buildConfig } from 'payload/config';
 import { webpackBundler } from '@payloadcms/bundler-webpack';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { slateEditor } from '@payloadcms/richtext-slate';
-import { cloudStorage, cloudinaryAdapter } from '@payloadcms/plugin-cloud-storage';
+import { cloudStorage } from '@payloadcms/plugin-cloud-storage';
+import { cloudinaryAdapter } from '@payloadcms/plugin-cloud-storage/cloudinary';
 
 // Collections
 import { Posts } from './collections/Posts';
@@ -14,6 +15,12 @@ import { Users } from './collections/Users';
 
 // Endpoints
 import health from './endpoints/health';
+
+const cloudinaryEnabled = Boolean(
+  process.env.CLOUDINARY_CLOUD_NAME &&
+  process.env.CLOUDINARY_API_KEY &&
+  process.env.CLOUDINARY_API_SECRET
+);
 
 export default buildConfig({
   admin: {
@@ -41,18 +48,22 @@ export default buildConfig({
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
   plugins: [
-    cloudStorage({
-      collections: {
-        media: {
-          adapter: cloudinaryAdapter({
-            cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-            apiKey: process.env.CLOUDINARY_API_KEY,
-            apiSecret: process.env.CLOUDINARY_API_SECRET,
-            folder: 'triplezerosports',
+    ...(cloudinaryEnabled
+      ? [
+          cloudStorage({
+            collections: {
+              media: {
+                adapter: cloudinaryAdapter({
+                  cloudName: process.env.CLOUDINARY_CLOUD_NAME as string,
+                  apiKey: process.env.CLOUDINARY_API_KEY as string,
+                  apiSecret: process.env.CLOUDINARY_API_SECRET as string,
+                  folder: 'triplezerosports',
+                }),
+              },
+            },
           }),
-        },
-      },
-    }),
+        ]
+      : []),
   ],
   db: postgresAdapter({
     pool: {
