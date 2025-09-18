@@ -47,24 +47,20 @@ const start = async () => {
         } catch (dbError) {
           payload.logger.error("Database connection test failed - this is expected if tables don't exist yet:", dbError);
           
-          // Try to run database push to create schema
-          try {
-            payload.logger.info("Attempting to create database schema...");
-            if (payload.db.push) {
-              await payload.db.push();
-              payload.logger.info("Database schema created successfully");
-            } else {
-              payload.logger.info("Database push not available, relying on automatic schema creation");
+          // Database push is enabled, so schema should be created automatically
+          payload.logger.info("Database push is enabled - schema should be created automatically on startup");
+          
+          // Wait a moment and test again
+          setTimeout(async () => {
+            try {
+              const userCountAfterWait = await payload.count({
+                collection: 'users',
+              });
+              payload.logger.info(`After waiting for schema creation: Found ${userCountAfterWait.totalDocs} users`);
+            } catch (retryError) {
+              payload.logger.error("Schema still not available after wait:", retryError);
             }
-            
-            // Test again after schema creation
-            const userCountAfterSchema = await payload.count({
-              collection: 'users',
-            });
-            payload.logger.info(`After schema creation: Found ${userCountAfterSchema.totalDocs} users`);
-          } catch (schemaError) {
-            payload.logger.error("Schema creation failed:", schemaError);
-          }
+          }, 2000);
         }
       },
     });
