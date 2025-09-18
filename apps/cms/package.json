@@ -10,7 +10,7 @@
     "build:server": "tsc -p tsconfig.json",
     "build": "npm run build:payload && npm run build:server",
     "migrate": "cross-env PAYLOAD_CONFIG_PATH=dist/payload.config.js payload migrate",
-    "start": "npm run migrate && node dist/server.js",
+    "start": "node dist/server.js",
     "seed": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts node --loader ts-node/esm src/seed.ts"
   },
   "dependencies": {

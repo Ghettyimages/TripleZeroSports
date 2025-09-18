@@ -47,19 +47,23 @@ const start = async () => {
         } catch (dbError) {
           payload.logger.error("Database connection test failed - this is expected if tables don't exist yet:", dbError);
           
-          // Try to run migrations programmatically
+          // Try to run database push to create schema
           try {
-            payload.logger.info("Attempting to run migrations...");
-            await payload.db.migrate();
-            payload.logger.info("Migrations completed successfully");
+            payload.logger.info("Attempting to create database schema...");
+            if (payload.db.push) {
+              await payload.db.push();
+              payload.logger.info("Database schema created successfully");
+            } else {
+              payload.logger.info("Database push not available, relying on automatic schema creation");
+            }
             
-            // Test again after migration
-            const userCountAfterMigration = await payload.count({
+            // Test again after schema creation
+            const userCountAfterSchema = await payload.count({
               collection: 'users',
             });
-            payload.logger.info(`After migration: Found ${userCountAfterMigration.totalDocs} users`);
-          } catch (migrationError) {
-            payload.logger.error("Migration failed:", migrationError);
+            payload.logger.info(`After schema creation: Found ${userCountAfterSchema.totalDocs} users`);
+          } catch (schemaError) {
+            payload.logger.error("Schema creation failed:", schemaError);
           }
         }
       },
