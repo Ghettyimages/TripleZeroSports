@@ -33,7 +33,6 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL!,
     },
     migrationDir: path.resolve(__dirname, "../migrations"),
-    push: true,
   }),
   typescript: {
     outputFile: path.resolve(__dirname, "../payload-types.ts")
