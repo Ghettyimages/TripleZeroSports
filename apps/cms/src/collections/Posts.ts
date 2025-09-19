@@ -13,7 +13,8 @@ export const Posts: CollectionConfig = {
       };
     },
   },
-  versions: { drafts: true },
+  // Temporarily disable versions to isolate the issue
+  // versions: { drafts: true },
   fields: [
     { name: "title", type: "text", required: true },
     { 
@@ -36,18 +37,9 @@ export const Posts: CollectionConfig = {
     },
     { name: "description", type: "textarea" },
     { name: "hero", type: "text" }, // image URL (Cloudinary optional later)
-    {
-      name: "author",
-      type: "relationship",
-      relationTo: "authors",
-      required: true
-    },
-    {
-      name: "tags",
-      type: "relationship",
-      relationTo: "tags",
-      hasMany: true
-    },
+    // Temporarily simplify relationships
+    { name: "author_name", type: "text" }, // Simple text instead of relationship
+    { name: "tag_names", type: "text" }, // Simple text instead of relationship
     { name: "featured", type: "checkbox", defaultValue: false },
     { name: "publishedAt", type: "date" },
     { name: "canonicalUrl", type: "text" },
