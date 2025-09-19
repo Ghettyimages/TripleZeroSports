@@ -30,6 +30,14 @@ async function runMigrations() {
     console.log('Running field fix migration...');
     await client.query(fixMigrationSQL);
     
+    // Run missing tables migration
+    console.log('Reading missing tables migration file...');
+    const missingTablesMigrationPath = path.resolve(__dirname, '../migrations/20240919_add_missing_tables.sql');
+    const missingTablesMigrationSQL = fs.readFileSync(missingTablesMigrationPath, 'utf8');
+    
+    console.log('Running missing tables migration...');
+    await client.query(missingTablesMigrationSQL);
+    
     console.log('All migrations completed successfully!');
     client.release();
   } catch (error) {
