@@ -62,6 +62,14 @@ async function runMigrations() {
     console.log('Running complete fix migration...');
     await client.query(completeFixMigrationSQL);
     
+    // Run simple columns migration
+    console.log('Reading simple columns migration file...');
+    const simpleColumnsMigrationPath = path.resolve(__dirname, '../migrations/20240919_add_simple_columns.sql');
+    const simpleColumnsMigrationSQL = fs.readFileSync(simpleColumnsMigrationPath, 'utf8');
+    
+    console.log('Running simple columns migration...');
+    await client.query(simpleColumnsMigrationSQL);
+    
     console.log('All migrations completed successfully!');
     client.release();
   } catch (error) {
