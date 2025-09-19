@@ -5,10 +5,10 @@
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
-  reset_password_token VARCHAR(255),
+  reset_password_token TEXT,
   reset_password_expiration TIMESTAMP,
-  salt VARCHAR(255),
-  hash VARCHAR(255),
+  salt TEXT,
+  hash TEXT,
   login_attempts INTEGER DEFAULT 0,
   lock_until TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

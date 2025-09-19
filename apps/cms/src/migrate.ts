@@ -14,14 +14,23 @@ async function runMigrations() {
     console.log('Connecting to database...');
     const client = await pool.connect();
     
-    console.log('Reading migration file...');
-    const migrationPath = path.resolve(__dirname, '../migrations/20240918_init.sql');
-    const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
+    // Run initial migration
+    console.log('Reading initial migration file...');
+    const initMigrationPath = path.resolve(__dirname, '../migrations/20240918_init.sql');
+    const initMigrationSQL = fs.readFileSync(initMigrationPath, 'utf8');
     
-    console.log('Running migration...');
-    await client.query(migrationSQL);
+    console.log('Running initial migration...');
+    await client.query(initMigrationSQL);
     
-    console.log('Migration completed successfully!');
+    // Run field fix migration
+    console.log('Reading field fix migration file...');
+    const fixMigrationPath = path.resolve(__dirname, '../migrations/20240919_fix_users_fields.sql');
+    const fixMigrationSQL = fs.readFileSync(fixMigrationPath, 'utf8');
+    
+    console.log('Running field fix migration...');
+    await client.query(fixMigrationSQL);
+    
+    console.log('All migrations completed successfully!');
     client.release();
   } catch (error) {
     console.error('Migration failed:', error);
