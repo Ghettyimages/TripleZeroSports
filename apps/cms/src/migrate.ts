@@ -46,6 +46,14 @@ async function runMigrations() {
     console.log('Running final fixes migration...');
     await client.query(finalFixesMigrationSQL);
     
+    // Run final columns migration
+    console.log('Reading final columns migration file...');
+    const finalColumnsMigrationPath = path.resolve(__dirname, '../migrations/20240919_final_columns.sql');
+    const finalColumnsMigrationSQL = fs.readFileSync(finalColumnsMigrationPath, 'utf8');
+    
+    console.log('Running final columns migration...');
+    await client.query(finalColumnsMigrationSQL);
+    
     console.log('All migrations completed successfully!');
     client.release();
   } catch (error) {
